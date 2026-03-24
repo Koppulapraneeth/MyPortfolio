@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praneeth Koppula — IoT Developer & Hardware Innovator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Font Awesome for real icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:       #0b0c0f;
+  --bg2:      #0f1117;
+  --bg3:      #13151c;
+  --panel:    rgba(255,255,255,0.03);
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --gold:     #c8a96e;
+  --gold2:    #e8c98a;
+  --gold-dim: rgba(200,169,110,0.15);
+  --teal:     #4ecdc4;
+  --teal-dim: rgba(78,205,196,0.1);
+  --text:     #e8e4dc;
+  --text2:    #9a9590;
+  --text3:    #5a5650;
+  --white:    #fdfaf5;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ═══════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════ */
+#cursor-dot {
+  position: fixed;
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.1s ease;
+  transform: translate(-50%, -50%);
+}
+#cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(200,169,110,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+body.hovering #cursor-ring {
+  width: 56px; height: 56px;
+  background: rgba(200,169,110,0.08);
+  border-color: var(--gold);
+}
+
+/* ═══════════════════════════════════════════
+   GRAIN OVERLAY
+═══════════════════════════════════════════ */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.4;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+/* ═══════════════════════════════════════════
+   LOADING SCREEN
+═══════════════════════════════════════════ */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 99997;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2rem;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#loader.gone { opacity: 0; visibility: hidden; }
+.loader-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem; font-weight: 300;
+  letter-spacing: 0.3em;
+  color: var(--white);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+.loader-bar-wrap {
+  width: 200px; height: 1px;
+  background: var(--border2);
+  overflow: hidden;
+}
+.loader-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--teal));
+  width: 0;
+  animation: loadprog 1.8s ease forwards;
+}
+@keyframes loadprog { to { width: 100%; } }
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  padding: 1.5rem 5%;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.4s ease;
+}
+nav.scrolled {
+  background: rgba(11,12,15,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 5%;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; font-weight: 400;
+  color: var(--white);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+.nav-logo em { color: var(--gold); font-style: italic; }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text2); text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+}
+.nav-links a::before {
+  content: '';
+  position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::before { width: 100%; }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { width: 22px; height: 1px; background: var(--text2); transition: all 0.3s; }
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+  padding: 0 5%;
+}
+
+.hero-bg-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(200,169,110,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,169,110,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+.orb-1 { width: 600px; height: 600px; background: rgba(200,169,110,0.08); top: -100px; right: -200px; animation: orbFloat 15s ease-in-out infinite; }
+.orb-2 { width: 400px; height: 400px; background: rgba(78,205,196,0.06); bottom: -100px; left: -100px; animation: orbFloat 20s ease-in-out infinite reverse; }
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(30px,-30px); }
+}
+
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 1300px; width: 100%; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+}
+
+.hero-left { opacity: 0; animation: fadeUp 1s ease 2.2s forwards; }
+
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+.eyebrow-line { width: 40px; height: 1px; background: var(--gold); }
+.eyebrow-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 7vw, 7rem);
+  font-weight: 300; line-height: 0.95;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+.hero-name em { font-style: italic; color: var(--gold); }
+
+.hero-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem; color: var(--text2);
+  min-height: 1.5rem; margin-bottom: 2rem;
+}
+.cursor-blink { animation: blink 0.8s infinite; color: var(--teal); }
+@keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+
+.hero-desc {
+  font-size: 1rem; line-height: 1.8;
+  color: var(--text2); max-width: 460px;
+  margin-bottom: 3rem;
+}
+
+.hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.9rem 2rem; border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem; letter-spacing: 0.08em;
+  text-decoration: none; cursor: pointer; border: none;
+  transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+.btn::before {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: rgba(255,255,255,0.06);
+  transition: left 0.3s ease;
+}
+.btn:hover::before { left: 0; }
+.btn-gold {
+  background: var(--gold); color: var(--bg);
+  font-weight: 600;
+}
+.btn-gold:hover { background: var(--gold2); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border2);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+/* Hero Right — Visual Card */
+.hero-right {
+  opacity: 0; animation: fadeIn 1s ease 2.5s forwards;
+  display: flex; justify-content: center;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.hero-card {
+  position: relative;
+  width: 340px;
+}
+.hero-card-inner {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+  position: relative; overflow: hidden;
+}
+.hero-card-inner::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* CHANGE 4: Larger avatar */
+.avatar-ring {
+  width: 140px; height: 140px; border-radius: 50%;
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  position: relative;
+}
+.avatar-ring::before {
+  content: '';
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 1px solid rgba(200,169,110,0.2);
+  animation: spin-slow 8s linear infinite;
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.avatar-inner {
+  width: 124px; height: 124px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-dim), rgba(78,205,196,0.1));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 400; color: var(--gold);
+  overflow: hidden;
+}
+.avatar-inner img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.hcard-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 400;
+  color: var(--white); text-align: center;
+  letter-spacing: 0.05em; margin-bottom: 0.3rem;
+}
+.hcard-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--gold);
+  text-align: center; letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+.hcard-divider { height: 1px; background: var(--border); margin-bottom: 1.5rem; }
+.hcard-stats { display: flex; justify-content: space-between; }
+.hcard-stat { text-align: center; }
+.hstat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 400; color: var(--gold);
+  display: block; line-height: 1;
+}
+.hstat-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--text3);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.hcard-status {
+  margin-top: 1.5rem; padding: 0.75rem 1rem;
+  background: rgba(78,205,196,0.06);
+  border: 1px solid rgba(78,205,196,0.15);
+  border-radius: 2px;
+  display: flex; align-items: center; gap: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--teal);
+  letter-spacing: 0.06em;
+}
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--teal);
+  animation: pulse-teal 2s ease-in-out infinite;
+}
+@keyframes pulse-teal {
+  0%,100%{box-shadow:0 0 0 0 rgba(78,205,196,0.4)}
+  50%{box-shadow:0 0 0 6px rgba(78,205,196,0)}
+}
+
+/* Floating badges */
+.float-badge {
+  position: absolute;
+  background: rgba(11,12,15,0.9);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--text2);
+  backdrop-filter: blur(10px);
+  animation: float-badge 4s ease-in-out infinite;
+}
+.badge-icon { font-size: 1rem; }
+.badge-left { left: -80px; top: 30%; animation-delay: 0s; }
+.badge-right { right: -80px; bottom: 25%; animation-delay: -2s; }
+@keyframes float-badge {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute; bottom: 3rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text3);
+  z-index: 2;
+  animation: fadeUp 1s ease 3s forwards; opacity: 0;
+}
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+
+/* ═══════════════════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════════════════ */
+section { padding: 7rem 5%; }
+.section-wrap { max-width: 1200px; margin: 0 auto; }
+
+.section-eyebrow {
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+}
+.eyebrow-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; color: var(--gold);
+  letter-spacing: 0.1em;
+}
+.eyebrow-dash { width: 30px; height: 1px; background: var(--border2); }
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  font-weight: 300; line-height: 1.1;
+  color: var(--white); letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+
+.section-sub {
+  font-size: 0.95rem; color: var(--text2); line-height: 1.8;
+  max-width: 500px;
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════ */
+#about { background: var(--bg2); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: start;
+}
+.about-left .section-sub { max-width: 100%; margin-bottom: 2.5rem; }
+
+.about-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.about-tag {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.08em;
+  color: var(--text2);
+  transition: all 0.3s ease;
+}
+.about-tag:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+.about-right { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.about-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 1.8rem;
+  position: relative; overflow: hidden;
+  transition: all 0.3s ease;
+}
+.about-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0; width: 2px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.about-card:hover { border-color: var(--border2); transform: translateX(4px); }
+.about-card:hover::before { opacity: 1; }
+.about-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--gold); letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 0.5rem;
+}
+.about-card-text { font-size: 0.95rem; line-height: 1.7; color: var(--text2); }
+
+/* ═══════════════════════════════════════════
+   SKILLS
+═══════════════════════════════════════════ */
+#skills { background: var(--bg); }
+.skills-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem;
+}
+.skills-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+}
+.skill-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 2rem;
+  transition: all 0.4s ease;
+  position: relative; overflow: hidden;
+}
+.skill-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(200,169,110,0.06), transparent 70%);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.skill-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+.skill-card:hover::after { opacity: 1; }
+
+.skill-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem; font-weight: 300;
+  color: rgba(200,169,110,0.12);
+  line-height: 1; margin-bottom: 1rem;
+  position: relative; z-index: 1;
+}
+.skill-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  color: var(--white); margin-bottom: 1.2rem;
+  position: relative; z-index: 1;
+}
+.skill-list {
+  list-style: none; display: flex; flex-direction: column; gap: 0.5rem;
+  position: relative; z-index: 1;
+}
+.skill-list li {
+  display: flex; align-items: center; gap: 0.7rem;
+  font-size: 0.88rem; color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+}
+.skill-list li::before { content: '→'; color: var(--teal); font-size: 0.75rem; }
+
+/* ═══════════════════════════════════════════
+   PROJECTS
+═══════════════════════════════════════════ */
+#projects { background: var(--bg2); }
+
+.projects-intro {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem;
+}
+
+.projects-list { display: flex; flex-direction: column; gap: 1px; }
+
+.project-item {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 0;
+  display: grid; grid-template-columns: 80px 1fr auto;
+  gap: 3rem; align-items: start;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.project-item:last-child { border-bottom: 1px solid var(--border); }
+.project-item:hover { padding-left: 1.5rem; border-top-color: var(--gold); }
+
+.project-idx {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.15em;
+  color: var(--text3); padding-top: 0.2rem;
+}
+
+.project-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(78,205,196,0.15);
+  padding: 0.25rem 0.7rem;
+  border-radius: 2px; margin-bottom: 0.8rem;
+}
+.project-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 400;
+  color: var(--white); margin-bottom: 0.8rem;
+  transition: color 0.2s ease;
+}
+.project-item:hover .project-title { color: var(--gold); }
+.project-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.7; max-width: 560px; }
+
+.project-tech-row {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;
+}
+.ptag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.06em;
+  color: var(--text3); padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border); border-radius: 2px;
+}
+
+.project-arrow {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); font-size: 1rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0; align-self: center;
+}
+.project-item:hover .project-arrow {
+  border-color: var(--gold); color: var(--gold);
+  background: var(--gold-dim); transform: rotate(45deg);
+}
+
+/* ═══════════════════════════════════════════
+   CERTIFICATIONS
+═══════════════════════════════════════════ */
+#certifications { background: var(--bg); }
+.certs-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
+  margin-top: 4rem;
+}
+.cert-item {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 2rem 1.5rem;
+  text-align: center; position: relative; overflow: hidden;
+  transition: all 0.4s ease;
+  text-decoration: none; color: inherit;
+  display: block;
+}
+.cert-item::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 100%, rgba(200,169,110,0.1), transparent 70%);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.cert-item:hover { border-color: var(--gold); transform: translateY(-6px); }
+.cert-item:hover::before { opacity: 1; }
+.cert-icon {
+  font-size: 1.8rem; margin-bottom: 1rem; display: block;
+}
+.cert-name {
+  font-size: 0.85rem; color: var(--text2);
+  line-height: 1.5; margin-bottom: 1rem;
+}
+.cert-link-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--gold);
+  letter-spacing: 0.08em;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+
+/* ═══════════════════════════════════════════
+   RESUME — CHANGE 3: New attractive section replacing preview
+═══════════════════════════════════════════ */
+#resume {
+  background: var(--bg2);
+  position: relative; overflow: hidden;
+}
+.resume-bg-text {
+  position: absolute; bottom: -2rem; right: -2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20rem; font-weight: 300;
+  color: rgba(200,169,110,0.03);
+  letter-spacing: -0.05em; line-height: 1;
+  pointer-events: none; user-select: none;
+}
+.resume-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+}
+.resume-info { position: relative; z-index: 1; }
+.resume-info .section-sub { margin-bottom: 2.5rem; }
+.resume-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* ── Animated Tech Stack Orb Panel ── */
+.resume-visual {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.tech-orbit-wrap {
+  position: relative;
+  width: 320px; height: 320px;
+}
+
+.orbit-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px; height: 90px;
+  background: linear-gradient(135deg, var(--gold-dim), rgba(78,205,196,0.08));
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 10;
+}
+.orbit-center-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; color: var(--gold);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+.orbit-center i { font-size: 1.4rem; color: var(--gold); }
+
+.orbit-ring {
+  position: absolute; top: 50%; left: 50%;
+  border-radius: 50%;
+  border: 1px dashed rgba(200,169,110,0.15);
+  transform: translate(-50%, -50%);
+}
+.orbit-ring-1 { width: 160px; height: 160px; animation: spin-orbit 12s linear infinite; }
+.orbit-ring-2 { width: 250px; height: 250px; animation: spin-orbit 20s linear infinite reverse; }
+.orbit-ring-3 { width: 320px; height: 320px; animation: spin-orbit 30s linear infinite; }
+
+@keyframes spin-orbit { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+.orbit-node {
+  position: absolute;
+  width: 48px; height: 48px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+.orbit-node:hover {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+  transform: scale(1.2);
+}
+.orbit-node .node-tooltip {
+  position: absolute; bottom: 115%;
+  left: 50%; transform: translateX(-50%);
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  padding: 0.3rem 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text);
+  white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.orbit-node:hover .node-tooltip { opacity: 1; }
+
+/* counter-rotate nodes so they stay upright */
+.orbit-ring-1 .orbit-node { animation: counter-spin 12s linear infinite; }
+.orbit-ring-2 .orbit-node { animation: counter-spin 20s linear infinite reverse; }
+.orbit-ring-3 .orbit-node { animation: counter-spin 30s linear infinite; }
+@keyframes counter-spin { to { transform: rotate(-360deg); } }
+
+/* Position nodes around ring-1 (radius ~80px from center) */
+.node-r1-1 { top: calc(50% - 80px - 24px); left: calc(50% - 24px); }
+.node-r1-2 { top: calc(50% - 24px); left: calc(50% + 80px - 24px); }
+.node-r1-3 { top: calc(50% + 80px - 24px); left: calc(50% - 24px); }
+.node-r1-4 { top: calc(50% - 24px); left: calc(50% - 80px - 24px); }
+
+/* Position nodes around ring-2 (radius ~125px from center) */
+.node-r2-1 { top: calc(50% - 125px - 24px); left: calc(50% - 24px); }
+.node-r2-2 { top: calc(50% - 88px - 24px); left: calc(50% + 88px - 24px); }
+.node-r2-3 { top: calc(50% - 24px); left: calc(50% + 125px - 24px); }
+.node-r2-4 { top: calc(50% + 88px - 24px); left: calc(50% - 24px); }
+
+/* Position nodes around ring-3 (radius ~160px from center) */
+.node-r3-1 { top: calc(50% - 160px - 24px); left: calc(50% - 70px); }
+.node-r3-2 { top: calc(50% + 120px - 24px); left: calc(50% + 80px - 24px); }
+
+/* ═══════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════ */
+#contact { background: var(--bg); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem;
+}
+.contact-chips { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2.5rem; }
+
+.contact-chip {
+  display: flex; align-items: center; gap: 1.2rem;
+  padding: 1.2rem 1.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  text-decoration: none; color: inherit;
+  transition: all 0.3s ease;
+}
+.contact-chip:hover {
+  border-color: var(--gold);
+  transform: translateX(6px);
+  background: var(--gold-dim);
+}
+.chip-icon-wrap {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--gold);
+  flex-shrink: 0; transition: all 0.3s ease;
+}
+.contact-chip:hover .chip-icon-wrap { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.chip-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; }
+.chip-value { font-size: 0.88rem; color: var(--text); }
+
+/* Form */
+.contact-form {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 2.5rem;
+  position: relative; overflow: hidden;
+}
+.contact-form::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 300;
+  color: var(--white); margin-bottom: 2rem;
+}
+.field { margin-bottom: 1.2rem; }
+.field label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text3);
+  margin-bottom: 0.5rem;
+}
+.field input, .field textarea {
+  width: 100%; padding: 0.9rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text); font-family: 'Syne', sans-serif;
+  font-size: 0.92rem;
+  transition: all 0.2s ease;
+}
+.field input:focus, .field textarea:focus {
+  outline: none; border-color: var(--gold);
+  background: rgba(200,169,110,0.05);
+}
+.field textarea { resize: vertical; min-height: 110px; }
+
+/* ═══════════════════════════════════════════
+   FOOTER — CHANGE 2: Real Font Awesome icons
+═══════════════════════════════════════════ */
+footer {
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+  padding: 3rem 5%;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 2rem;
+}
+.footer-left .footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; color: var(--white);
+  letter-spacing: 0.06em; margin-bottom: 0.3rem;
+}
+.footer-left .footer-logo em { color: var(--gold); font-style: italic; }
+.footer-tagline { font-size: 0.8rem; color: var(--text3); font-style: italic; }
+.footer-socials { display: flex; gap: 0.75rem; }
+.footer-soc {
+  width: 40px; height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); font-size: 1rem;
+  text-decoration: none; transition: all 0.3s ease;
+}
+.footer-soc:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+.footer-copy { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text3); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .certs-grid { grid-template-columns: repeat(3, 1fr); }
+  .float-badge { display: none; }
+}
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-right { display: none; }
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .resume-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .certs-grid { grid-template-columns: repeat(2, 1fr); }
+  .project-item { grid-template-columns: 50px 1fr auto; gap: 1.5rem; }
+  .tech-orbit-wrap { width: 260px; height: 260px; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(11,12,15,0.98);
+    backdrop-filter: blur(20px);
+    align-items: center; justify-content: center;
+    gap: 2.5rem; z-index: 999;
+  }
+  .nav-links.open a { font-size: 1rem; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .certs-grid { grid-template-columns: 1fr 1fr; }
+  section { padding: 5rem 5%; }
+  .project-item { grid-template-columns: 1fr; gap: 1rem; }
+  .project-idx { display: none; }
+  .project-arrow { display: none; }
+}
+@media (max-width: 480px) {
+  .certs-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-name">Praneeth Koppula</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">P<em>K</em></a>
+  <div class="hamburger" id="ham">
+    <span></span><span></span><span></span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#resume">Resume</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-bg-lines"></div>
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">Portfolio 2026</span>
+      </div>
+      <h1 class="hero-name">Praneeth<br><em>Koppula</em></h1>
+      <div class="hero-role" id="typingEl"><span class="cursor-blink">_</span></div>
+      <p class="hero-desc">Building innovative hardware solutions through embedded systems, IoT, and real‑world problem solving — one circuit at a time.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-gold">View Projects →</a>
+        <!-- CHANGE 1: Updated CV link -->
+        <a href="https://drive.google.com/file/d/1MZvABnxwZ_Dw1c7bZCidEVyvBeAZYTvU/view?usp=drivesdk" target="_blank" class="btn btn-outline">Download CV</a>
+        <a href="#contact" class="btn btn-outline">Say Hello</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="float-badge badge-left">
+          <span class="badge-icon">⚡</span>
+          <span>IoT Dev</span>
+        </div>
+        <div class="hero-card-inner">
+          <!-- CHANGE 4: Larger avatar -->
+          <div class="avatar-ring">
+            <div class="avatar-inner">
+              <img src="images/praneeth-photo.jpg" alt="Praneeth" onerror="this.style.display='none'; this.parentElement.innerHTML='PK';">
+            </div>
+          </div>
+          <div class="hcard-name">Praneeth Koppula</div>
+          <div class="hcard-role">IoT Developer · CS Engineer</div>
+          <div class="hcard-divider"></div>
+          <div class="hcard-stats">
+            <div class="hcard-stat">
+              <span class="hstat-num" data-target="4">0</span>
+              <span class="hstat-lbl">Projects</span>
+            </div>
+            <div class="hcard-stat">
+              <span class="hstat-num" data-target="5">0</span>
+              <span class="hstat-lbl">Certs</span>
+            </div>
+            <div class="hcard-stat">
+              <span class="hstat-num" data-target="2">0</span>
+              <span class="hstat-lbl">Years</span>
+            </div>
+          </div>
+          <div class="hcard-status">
+            <div class="status-dot"></div>
+            Open to Opportunities
+          </div>
+        </div>
+        <div class="float-badge badge-right">
+          <span class="badge-icon">🔬</span>
+          <span>Embedded Sys</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="section-eyebrow">
+          <span class="eyebrow-num">01</span>
+          <div class="eyebrow-dash"></div>
+        </div>
+        <h2 class="section-title">About<br><em>Me</em></h2>
+        <p class="section-sub" style="margin-bottom:2rem;">A Computer Science Engineering student at Sri Mittapalli College of Engineering with a deep passion for hardware innovation, embedded systems, and IoT development.</p>
+        <p class="section-sub">Long-term vision: become a technology entrepreneur by developing innovative products that improve everyday life. Also a creative video editor and content creator.</p>
+        <div class="about-tags" style="margin-top:2rem;">
+          <span class="about-tag">IoT Developer</span>
+          <span class="about-tag">Embedded Systems</span>
+          <span class="about-tag">Hardware Innovation</span>
+          <span class="about-tag">C / Python</span>
+          <span class="about-tag">Arduino</span>
+          <span class="about-tag">Raspberry Pi</span>
+          <span class="about-tag">Video Editing</span>
+          <span class="about-tag">Guntur, AP</span>
+        </div>
+      </div>
+      <div class="about-right reveal" style="transition-delay:0.2s">
+        <div class="about-card">
+          <div class="about-card-title">🎓 Education</div>
+          <div class="about-card-text">B.Tech in Computer Science Engineering at Sri Mittapalli College of Engineering, Andhra Pradesh — developing strong fundamentals in computing, electronics, and embedded systems.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">🔌 Hardware Focus</div>
+          <div class="about-card-text">Passionate about microcontrollers, sensors, and real-world IoT deployments. Experienced with ESP8266/NodeMCU, Arduino, Raspberry Pi, and sensor integration for smart monitoring systems.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">🚀 Entrepreneurial Vision</div>
+          <div class="about-card-text">Driven to build technology products that solve real-world problems. Currently building skills across hardware, software, and creative domains to become a full-stack technology entrepreneur.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-title">🎬 Creative Side</div>
+          <div class="about-card-text">Beyond circuits and code — a skilled video editor and content creator who brings a unique blend of technical precision and creative storytelling to every project.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SKILLS ═══ -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="skills-header">
+      <div class="reveal">
+        <div class="section-eyebrow">
+          <span class="eyebrow-num">02</span>
+          <div class="eyebrow-dash"></div>
+        </div>
+        <h2 class="section-title">Skills &<br><em>Expertise</em></h2>
+      </div>
+      <p class="section-sub reveal" style="transition-delay:0.2s">A multidisciplinary skill set spanning embedded hardware, programming, and creative production.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card reveal" style="transition-delay:0.1s">
+        <div class="skill-num">01</div>
+        <h3>Programming Languages</h3>
+        <ul class="skill-list">
+          <li>C Programming</li>
+          <li>Python</li>
+          <li>Java (learning)</li>
+          <li>Embedded C</li>
+        </ul>
+      </div>
+      <div class="skill-card reveal" style="transition-delay:0.2s">
+        <div class="skill-num">02</div>
+        <h3>Hardware & IoT</h3>
+        <ul class="skill-list">
+          <li>Internet of Things</li>
+          <li>Embedded Systems</li>
+          <li>Arduino / ESP8266</li>
+          <li>Raspberry Pi</li>
+          <li>Sensor Integration</li>
+        </ul>
+      </div>
+      <div class="skill-card reveal" style="transition-delay:0.3s">
+        <div class="skill-num">03</div>
+        <h3>Creative & Tools</h3>
+        <ul class="skill-list">
+          <li>Prompt Engineering</li>
+          <li>Video Editing</li>
+          <li>Content Creation</li>
+          <li>Microsoft Office</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROJECTS ═══ -->
+<section id="projects">
+  <div class="section-wrap">
+    <div class="projects-intro">
+      <div class="reveal">
+        <div class="section-eyebrow">
+          <span class="eyebrow-num">03</span>
+          <div class="eyebrow-dash"></div>
+        </div>
+        <h2 class="section-title">Featured<br><em>Projects</em></h2>
+      </div>
+      <p class="section-sub reveal" style="transition-delay:0.2s">Real-world hardware and software builds — from air quality monitoring to console-based applications.</p>
+    </div>
+    <div class="projects-list">
+
+      <a class="project-item reveal" href="https://drive.google.com/drive/folders/1HpLvbbZnzVkQGR51dSvvxeePJG-_-iwr" target="_blank">
+        <span class="project-idx">01</span>
+        <div class="project-content">
+          <span class="project-tag">IoT · Hardware</span>
+          <h3 class="project-title">IoT-Based Air Pollution Meter</h3>
+          <p class="project-desc">Real-time air quality monitoring using MQ135 sensor on ESP8266 NodeMCU. Detects harmful gases, alerts via LEDs and buzzers, streams data to IoT monitoring platforms.</p>
+          <div class="project-tech-row">
+            <span class="ptag">ESP8266 NodeMCU</span>
+            <span class="ptag">MQ135 Sensor</span>
+            <span class="ptag">IoT Platform</span>
+            <span class="ptag">Embedded C</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a class="project-item reveal" href="https://drive.google.com/drive/folders/1FCwOTjB0sfLs5DgkEsFRFSrHih4St8R7" target="_blank">
+        <span class="project-idx">02</span>
+        <div class="project-content">
+          <span class="project-tag">C · Software</span>
+          <h3 class="project-title">ATM Simulator in C</h3>
+          <p class="project-desc">Console-based banking application simulating core ATM functionalities — balance check, withdrawals, deposits, and transaction history using structured C programming.</p>
+          <div class="project-tech-row">
+            <span class="ptag">C Programming</span>
+            <span class="ptag">Data Handling</span>
+            <span class="ptag">Console App</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a class="project-item reveal" href="https://drive.google.com/drive/folders/18-JG48tKSO9bWur-ZG6mXyiIUq7zry1e" target="_blank">
+        <span class="project-idx">03</span>
+        <div class="project-content">
+          <span class="project-tag">C · Logic</span>
+          <h3 class="project-title">Age Calculator in C</h3>
+          <p class="project-desc">Calculates exact age from date of birth — computing date differences from the current date, exploring date arithmetic and structured programming concepts in C.</p>
+          <div class="project-tech-row">
+            <span class="ptag">C Programming</span>
+            <span class="ptag">Date Arithmetic</span>
+            <span class="ptag">Logic Building</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a class="project-item reveal" href="https://docs.google.com/document/d/1IgUPJsUlUsgJ6nwre1xL1DYvTQIQgX0rQXWW46pLyNo/edit" target="_blank">
+        <span class="project-idx">04</span>
+        <div class="project-content">
+          <span class="project-tag">C · Math</span>
+          <h3 class="project-title">Scientific Calculator</h3>
+          <p class="project-desc">Advanced calculator performing trigonometry, exponentiation, logarithms, and square roots — demonstrating complex math function implementation in pure C.</p>
+          <div class="project-tech-row">
+            <span class="ptag">C Programming</span>
+            <span class="ptag">Math Libraries</span>
+            <span class="ptag">Algorithms</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CERTIFICATIONS ═══ -->
+<section id="certifications">
+  <div class="section-wrap">
+    <div class="reveal" style="margin-bottom:1rem">
+      <div class="section-eyebrow">
+        <span class="eyebrow-num">04</span>
+        <div class="eyebrow-dash"></div>
+      </div>
+      <h2 class="section-title">Certifications &<br><em>Achievements</em></h2>
+    </div>
+    <div class="certs-grid">
+      <a class="cert-item reveal" href="https://drive.google.com/drive/folders/1KKRHOdOHtS-z9Gh7J7nK-tONZJ3UlfPM?usp=drive_link" target="_blank" style="transition-delay:0.1s">
+        <span class="cert-icon">🏆</span>
+        <div class="cert-name">Microsoft Office Specialist</div>
+        <span class="cert-link-text">View →</span>
+      </a>
+      <a class="cert-item reveal" href="https://drive.google.com/drive/folders/1KKRHOdOHtS-z9Gh7J7nK-tONZJ3UlfPM?usp=drive_link" target="_blank" style="transition-delay:0.15s">
+        <span class="cert-icon">🎯</span>
+        <div class="cert-name">Certified C Programmer</div>
+        <span class="cert-link-text">View →</span>
+      </a>
+      <a class="cert-item reveal" href="https://drive.google.com/drive/folders/1KKRHOdOHtS-z9Gh7J7nK-tONZJ3UlfPM?usp=drive_link" target="_blank" style="transition-delay:0.2s">
+        <span class="cert-icon">🐍</span>
+        <div class="cert-name">Intro to Programming Using Python</div>
+        <span class="cert-link-text">View →</span>
+      </a>
+      <a class="cert-item reveal" href="https://drive.google.com/drive/folders/1KKRHOdOHtS-z9Gh7J7nK-tONZJ3UlfPM?usp=drive_link" target="_blank" style="transition-delay:0.25s">
+        <span class="cert-icon">🤖</span>
+        <div class="cert-name">Prompt Engineering</div>
+        <span class="cert-link-text">View →</span>
+      </a>
+      <a class="cert-item reveal" href="https://drive.google.com/drive/folders/1KKRHOdOHtS-z9Gh7J7nK-tONZJ3UlfPM?usp=drive_link" target="_blank" style="transition-delay:0.3s">
+        <span class="cert-icon">🌟</span>
+        <div class="cert-name">Certificate of Appreciation</div>
+        <span class="cert-link-text">View →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RESUME ═══ -->
+<section id="resume">
+  <div class="section-wrap">
+    <div class="resume-bg-text">CV</div>
+    <div class="resume-inner">
+      <div class="resume-info reveal">
+        <div class="section-eyebrow">
+          <span class="eyebrow-num">05</span>
+          <div class="eyebrow-dash"></div>
+        </div>
+        <h2 class="section-title">Download<br><em>Resume</em></h2>
+        <p class="section-sub">Get a complete overview of my education, skills, projects, and experience in one document.</p>
+        <!-- CHANGE 1: Updated CV link -->
+        <div class="resume-btns" style="margin-top:2.5rem">
+          <a href="https://drive.google.com/file/d/1MZvABnxwZ_Dw1c7bZCidEVyvBeAZYTvU/view?usp=drivesdk" target="_blank" class="btn btn-gold">↓ Download CV</a>
+          <a href="https://drive.google.com/file/d/1MZvABnxwZ_Dw1c7bZCidEVyvBeAZYTvU/view?usp=drivesdk" target="_blank" class="btn btn-outline">Preview</a>
+        </div>
+      </div>
+
+      <!-- CHANGE 3: Animated tech orbit instead of static resume preview -->
+      <div class="resume-visual reveal" style="transition-delay:0.3s">
+        <div class="tech-orbit-wrap">
+          <!-- Center -->
+          <div class="orbit-center">
+            <i class="fa-solid fa-microchip"></i>
+            <span class="orbit-center-label">Tech Stack</span>
+          </div>
+
+          <!-- Ring 1 -->
+          <div class="orbit-ring orbit-ring-1">
+            <div class="orbit-node node-r1-1">🐍<span class="node-tooltip">Python</span></div>
+            <div class="orbit-node node-r1-2">⚡<span class="node-tooltip">ESP8266</span></div>
+            <div class="orbit-node node-r1-3">©<span class="node-tooltip">C Lang</span></div>
+            <div class="orbit-node node-r1-4">🥧<span class="node-tooltip">Raspberry Pi</span></div>
+          </div>
+
+          <!-- Ring 2 -->
+          <div class="orbit-ring orbit-ring-2">
+            <div class="orbit-node node-r2-1">🌐<span class="node-tooltip">IoT</span></div>
+            <div class="orbit-node node-r2-2">🤖<span class="node-tooltip">AI Prompting</span></div>
+            <div class="orbit-node node-r2-3">🎬<span class="node-tooltip">Video Edit</span></div>
+            <div class="orbit-node node-r2-4">📟<span class="node-tooltip">Arduino</span></div>
+          </div>
+
+          <!-- Ring 3 -->
+          <div class="orbit-ring orbit-ring-3">
+            <div class="orbit-node node-r3-1">📊<span class="node-tooltip">MS Office</span></div>
+            <div class="orbit-node node-r3-2">🔧<span class="node-tooltip">Embedded C</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="section-eyebrow">
+          <span class="eyebrow-num">06</span>
+          <div class="eyebrow-dash"></div>
+        </div>
+        <h2 class="section-title">Get In<br><em>Touch</em></h2>
+        <p class="section-sub">Open to collaborations, internships, and interesting hardware projects. Let's build something great.</p>
+        <div class="contact-chips">
+          <a class="contact-chip" href="mailto:praneeth.koppula007@gmail.com">
+            <div class="chip-icon-wrap"><i class="fa-solid fa-envelope"></i></div>
+            <div><div class="chip-label">Email</div><div class="chip-value">praneeth.koppula007@gmail.com</div></div>
+          </a>
+          <a class="contact-chip" href="tel:+919652568528">
+            <div class="chip-icon-wrap"><i class="fa-solid fa-phone"></i></div>
+            <div><div class="chip-label">Phone</div><div class="chip-value">+91 9652568528</div></div>
+          </a>
+          <a class="contact-chip" href="https://www.linkedin.com/in/praneeth-koppula-b1a682306" target="_blank">
+            <div class="chip-icon-wrap"><i class="fa-brands fa-linkedin-in"></i></div>
+            <div><div class="chip-label">LinkedIn</div><div class="chip-value">praneeth-koppula</div></div>
+          </a>
+          <a class="contact-chip" href="https://github.com/Koppulapraneeth" target="_blank">
+            <div class="chip-icon-wrap"><i class="fa-brands fa-github"></i></div>
+            <div><div class="chip-label">GitHub</div><div class="chip-value">Koppulapraneeth</div></div>
+          </a>
+          <a class="contact-chip" href="https://www.instagram.com/praneethkoppula" target="_blank">
+            <div class="chip-icon-wrap"><i class="fa-brands fa-instagram"></i></div>
+            <div><div class="chip-label">Instagram</div><div class="chip-value">@praneethkoppula</div></div>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form reveal" style="transition-delay:0.3s">
+        <h3 class="form-title">Send a Message</h3>
+        <form id="contactForm">
+          <div class="field">
+            <label>Your Name</label>
+            <input type="text" id="fname" placeholder="John Doe" required>
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="femail" placeholder="john@example.com" required>
+          </div>
+          <div class="field">
+            <label>Message</label>
+            <textarea id="fmsg" placeholder="Hello Praneeth, I'd like to..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center">Send Message →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER — CHANGE 2: Real Font Awesome icons -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo">Praneeth <em>Koppula</em></div>
+      <div class="footer-tagline">"Building technology today for the innovations of tomorrow."</div>
+    </div>
+    <div class="footer-socials">
+      <a class="footer-soc" href="https://www.linkedin.com/in/praneeth-koppula-b1a682306" target="_blank" title="LinkedIn">
+        <i class="fa-brands fa-linkedin-in"></i>
+      </a>
+      <a class="footer-soc" href="https://github.com/Koppulapraneeth" target="_blank" title="GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+      <a class="footer-soc" href="https://www.instagram.com/praneethkoppula" target="_blank" title="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+      <a class="footer-soc" href="mailto:praneeth.koppula007@gmail.com" title="Email">
+        <i class="fa-solid fa-envelope"></i>
+      </a>
+    </div>
+    <div class="footer-copy">© 2026 Praneeth Koppula. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+function animRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a,button,.project-item,.about-card,.skill-card,.cert-item,.contact-chip').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+/* ── LOADER ── */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('gone'), 2000);
+});
+
+/* ── NAVBAR ── */
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+
+/* ── HAMBURGER ── */
+const ham = document.getElementById('ham');
+const navLinks = document.getElementById('navLinks');
+ham.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+/* ── TYPING ANIMATION ── */
+const phrases = ['IoT Developer_','Hardware Innovator_','CS Engineer_','Tech Entrepreneur_','Embedded Systems Dev_'];
+let pi = 0, ci = 0, del = false;
+const typEl = document.getElementById('typingEl');
+function typeAnim() {
+  const cur = phrases[pi];
+  if (del) { ci--; } else { ci++; }
+  typEl.textContent = cur.substring(0, ci);
+  if (!del && ci === cur.length) { setTimeout(() => { del = true; typeAnim(); }, 1800); return; }
+  if (del && ci === 0) { del = false; pi = (pi + 1) % phrases.length; setTimeout(typeAnim, 300); return; }
+  setTimeout(typeAnim, del ? 40 : 80);
+}
+setTimeout(typeAnim, 2400);
+
+/* ── COUNTER ANIMATION ── */
+function countUp(el) {
+  const target = +el.dataset.target;
+  let c = 0; const step = target / 30;
+  const tick = () => { c += step; el.textContent = c < target ? Math.ceil(c) + '+' : target + '+'; if (c < target) setTimeout(tick, 50); };
+  tick();
+}
+const counterDone = new Set();
+const counters = document.querySelectorAll('[data-target]');
+
+/* ── REVEAL ON SCROLL ── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      counters.forEach(c => {
+        if (!counterDone.has(c) && c.getBoundingClientRect().top < window.innerHeight) {
+          counterDone.add(c); countUp(c);
+        }
+      });
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(r => observer.observe(r));
+
+/* ── CONTACT FORM ── */
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('fname').value;
+  const email = document.getElementById('femail').value;
+  const msg = document.getElementById('fmsg').value;
+  const subject = encodeURIComponent('Portfolio Contact from ' + name);
+  const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + msg);
+  window.open('mailto:praneeth.koppula007@gmail.com?subject=' + subject + '&body=' + body, '_blank');
+  this.reset();
+});
+
+/* ── SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const t = document.querySelector(this.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+/* ── PARTICLE CANVAS ── */
+const canvas = document.createElement('canvas');
+canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.4';
+document.body.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth; canvas.height = innerHeight;
+window.addEventListener('resize', () => { canvas.width = innerWidth; canvas.height = innerHeight; });
+
+const pts = Array.from({length:60}, () => ({
+  x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+  vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3, r: Math.random()*1.5+.5
+}));
+function drawParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pts.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if(p.x < 0 || p.x > canvas.width) p.vx*=-1;
+    if(p.y < 0 || p.y > canvas.height) p.vy*=-1;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle = 'rgba(200,169,110,0.4)'; ctx.fill();
+  });
+  for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++) {
+    const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
+    if(d<120) {
+      ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+      ctx.strokeStyle=`rgba(200,169,110,${(1-d/120)*0.15})`; ctx.lineWidth=0.5; ctx.stroke();
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+</script>
+</body>
+</html>

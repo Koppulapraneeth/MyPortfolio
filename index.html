@@ -6,12 +6,10 @@
 <title>Praneeth Koppula — IoT Developer & Hardware Innovator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<!-- Font Awesome for real icons -->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-/* ═══════════════════════════════════════════
-   RESET & VARIABLES
-═══════════════════════════════════════════ */
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
@@ -42,9 +40,7 @@ body {
   cursor: none;
 }
 
-/* ═══════════════════════════════════════════
-   CUSTOM CURSOR
-═══════════════════════════════════════════ */
+
 #cursor-dot {
   position: fixed;
   width: 6px; height: 6px;
@@ -71,9 +67,7 @@ body.hovering #cursor-ring {
   border-color: var(--gold);
 }
 
-/* ═══════════════════════════════════════════
-   GRAIN OVERLAY
-═══════════════════════════════════════════ */
+
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -83,16 +77,12 @@ body::after {
   opacity: 0.4;
 }
 
-/* ═══════════════════════════════════════════
-   SCROLLBAR
-═══════════════════════════════════════════ */
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
 
-/* ═══════════════════════════════════════════
-   LOADING SCREEN
-═══════════════════════════════════════════ */
+
 #loader {
   position: fixed; inset: 0;
   background: var(--bg);
@@ -125,9 +115,6 @@ body::after {
 @keyframes loadprog { to { width: 100%; } }
 @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 
-/* ═══════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════ */
 nav {
   position: fixed; top: 0; width: 100%; z-index: 1000;
   padding: 1.5rem 5%;
@@ -170,9 +157,7 @@ nav.scrolled {
 .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
 .hamburger span { width: 22px; height: 1px; background: var(--text2); transition: all 0.3s; }
 
-/* ═══════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════ */
+
 #hero {
   min-height: 100vh;
   display: flex; align-items: center;
@@ -273,7 +258,7 @@ nav.scrolled {
 }
 .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
 
-/* Hero Right — Visual Card */
+
 .hero-right {
   opacity: 0; animation: fadeIn 1s ease 2.5s forwards;
   display: flex; justify-content: center;
@@ -298,7 +283,7 @@ nav.scrolled {
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
-/* CHANGE 4: Larger avatar */
+
 .avatar-ring {
   width: 140px; height: 140px; border-radius: 50%;
   border: 1px solid var(--gold);
@@ -369,7 +354,7 @@ nav.scrolled {
   50%{box-shadow:0 0 0 6px rgba(78,205,196,0)}
 }
 
-/* Floating badges */
+
 .float-badge {
   position: absolute;
   background: rgba(11,12,15,0.9);
@@ -390,7 +375,7 @@ nav.scrolled {
   50%{transform:translateY(-8px)}
 }
 
-/* Scroll hint */
+
 .scroll-hint {
   position: absolute; bottom: 3rem; left: 50%;
   transform: translateX(-50%);
@@ -413,9 +398,7 @@ nav.scrolled {
   100%{transform:scaleY(0);transform-origin:bottom}
 }
 
-/* ═══════════════════════════════════════════
-   SECTION COMMONS
-═══════════════════════════════════════════ */
+
 section { padding: 7rem 5%; }
 .section-wrap { max-width: 1200px; margin: 0 auto; }
 
@@ -443,16 +426,14 @@ section { padding: 7rem 5%; }
   max-width: 500px;
 }
 
-/* Reveal animation */
+
 .reveal {
   opacity: 0; transform: translateY(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ═══════════════════════════════════════════
-   ABOUT
-═══════════════════════════════════════════ */
+
 #about { background: var(--bg2); }
 .about-grid {
   display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: start;
@@ -497,9 +478,7 @@ section { padding: 7rem 5%; }
 }
 .about-card-text { font-size: 0.95rem; line-height: 1.7; color: var(--text2); }
 
-/* ═══════════════════════════════════════════
-   SKILLS
-═══════════════════════════════════════════ */
+
 #skills { background: var(--bg); }
 .skills-header {
   display: flex; justify-content: space-between; align-items: flex-end;
@@ -548,9 +527,7 @@ section { padding: 7rem 5%; }
 }
 .skill-list li::before { content: '→'; color: var(--teal); font-size: 0.75rem; }
 
-/* ═══════════════════════════════════════════
-   PROJECTS
-═══════════════════════════════════════════ */
+
 #projects { background: var(--bg2); }
 
 .projects-intro {
@@ -622,9 +599,7 @@ section { padding: 7rem 5%; }
   background: var(--gold-dim); transform: rotate(45deg);
 }
 
-/* ═══════════════════════════════════════════
-   CERTIFICATIONS
-═══════════════════════════════════════════ */
+
 #certifications { background: var(--bg); }
 .certs-grid {
   display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
@@ -661,9 +636,7 @@ section { padding: 7rem 5%; }
   display: inline-flex; align-items: center; gap: 0.4rem;
 }
 
-/* ═══════════════════════════════════════════
-   RESUME — CHANGE 3: New attractive section replacing preview
-═══════════════════════════════════════════ */
+
 #resume {
   background: var(--bg2);
   position: relative; overflow: hidden;
@@ -683,7 +656,7 @@ section { padding: 7rem 5%; }
 .resume-info .section-sub { margin-bottom: 2.5rem; }
 .resume-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
 
-/* ── Animated Tech Stack Orb Panel ── */
+
 .resume-visual {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: center;
@@ -755,31 +728,29 @@ section { padding: 7rem 5%; }
 }
 .orbit-node:hover .node-tooltip { opacity: 1; }
 
-/* counter-rotate nodes so they stay upright */
+
 .orbit-ring-1 .orbit-node { animation: counter-spin 12s linear infinite; }
 .orbit-ring-2 .orbit-node { animation: counter-spin 20s linear infinite reverse; }
 .orbit-ring-3 .orbit-node { animation: counter-spin 30s linear infinite; }
 @keyframes counter-spin { to { transform: rotate(-360deg); } }
 
-/* Position nodes around ring-1 (radius ~80px from center) */
+
 .node-r1-1 { top: calc(50% - 80px - 24px); left: calc(50% - 24px); }
 .node-r1-2 { top: calc(50% - 24px); left: calc(50% + 80px - 24px); }
 .node-r1-3 { top: calc(50% + 80px - 24px); left: calc(50% - 24px); }
 .node-r1-4 { top: calc(50% - 24px); left: calc(50% - 80px - 24px); }
 
-/* Position nodes around ring-2 (radius ~125px from center) */
+
 .node-r2-1 { top: calc(50% - 125px - 24px); left: calc(50% - 24px); }
 .node-r2-2 { top: calc(50% - 88px - 24px); left: calc(50% + 88px - 24px); }
 .node-r2-3 { top: calc(50% - 24px); left: calc(50% + 125px - 24px); }
 .node-r2-4 { top: calc(50% + 88px - 24px); left: calc(50% - 24px); }
 
-/* Position nodes around ring-3 (radius ~160px from center) */
+
 .node-r3-1 { top: calc(50% - 160px - 24px); left: calc(50% - 70px); }
 .node-r3-2 { top: calc(50% + 120px - 24px); left: calc(50% + 80px - 24px); }
 
-/* ═══════════════════════════════════════════
-   CONTACT
-═══════════════════════════════════════════ */
+
 #contact { background: var(--bg); }
 .contact-grid {
   display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem;
@@ -852,9 +823,7 @@ section { padding: 7rem 5%; }
 }
 .field textarea { resize: vertical; min-height: 110px; }
 
-/* ═══════════════════════════════════════════
-   FOOTER — CHANGE 2: Real Font Awesome icons
-═══════════════════════════════════════════ */
+
 footer {
   background: var(--bg3);
   border-top: 1px solid var(--border);
@@ -884,9 +853,7 @@ footer {
 .footer-soc:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
 .footer-copy { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text3); }
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════ */
+
 @media (max-width: 1100px) {
   .certs-grid { grid-template-columns: repeat(3, 1fr); }
   .float-badge { display: none; }
@@ -928,17 +895,17 @@ footer {
 </head>
 <body>
 
-<!-- CURSOR -->
+
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
-<!-- LOADER -->
+
 <div id="loader">
   <div class="loader-name">Praneeth Koppula</div>
   <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
 </div>
 
-<!-- NAV -->
+
 <nav id="navbar">
   <a class="nav-logo" href="#hero">P<em>K</em></a>
   <div class="hamburger" id="ham">
@@ -954,7 +921,6 @@ footer {
   </ul>
 </nav>
 
-<!-- ═══ HERO ═══ -->
 <section id="hero">
   <div class="hero-bg-lines"></div>
   <div class="hero-orb orb-1"></div>
@@ -971,7 +937,7 @@ footer {
       <p class="hero-desc">Building innovative hardware solutions through embedded systems, IoT, and real‑world problem solving — one circuit at a time.</p>
       <div class="hero-cta">
         <a href="#projects" class="btn btn-gold">View Projects →</a>
-        <!-- CHANGE 1: Updated CV link -->
+        
         <a href="https://drive.google.com/file/d/1MZvABnxwZ_Dw1c7bZCidEVyvBeAZYTvU/view?usp=drivesdk" target="_blank" class="btn btn-outline">Download CV</a>
         <a href="#contact" class="btn btn-outline">Say Hello</a>
       </div>
@@ -984,7 +950,7 @@ footer {
           <span>IoT Dev</span>
         </div>
         <div class="hero-card-inner">
-          <!-- CHANGE 4: Larger avatar -->
+         
           <div class="avatar-ring">
             <div class="avatar-inner">
               <img src="praneeth-photo.jpg" alt="Praneeth" onerror="this.style.display='none'; this.parentElement.innerHTML='PK';">
@@ -1026,7 +992,7 @@ footer {
   </div>
 </section>
 
-<!-- ═══ ABOUT ═══ -->
+
 <section id="about">
   <div class="section-wrap">
     <div class="about-grid">
@@ -1071,7 +1037,7 @@ footer {
   </div>
 </section>
 
-<!-- ═══ SKILLS ═══ -->
+
 <section id="skills">
   <div class="section-wrap">
     <div class="skills-header">
@@ -1120,7 +1086,7 @@ footer {
   </div>
 </section>
 
-<!-- ═══ PROJECTS ═══ -->
+
 <section id="projects">
   <div class="section-wrap">
     <div class="projects-intro">
@@ -1200,7 +1166,7 @@ footer {
   </div>
 </section>
 
-<!-- ═══ CERTIFICATIONS ═══ -->
+
 <section id="certifications">
   <div class="section-wrap">
     <div class="reveal" style="margin-bottom:1rem">
@@ -1240,7 +1206,7 @@ footer {
   </div>
 </section>
 
-<!-- ═══ RESUME ═══ -->
+
 <section id="resume">
   <div class="section-wrap">
     <div class="resume-bg-text">CV</div>
@@ -1252,23 +1218,23 @@ footer {
         </div>
         <h2 class="section-title">Download<br><em>Resume</em></h2>
         <p class="section-sub">Get a complete overview of my education, skills, projects, and experience in one document.</p>
-        <!-- CHANGE 1: Updated CV link -->
+       
         <div class="resume-btns" style="margin-top:2.5rem">
           <a href="https://drive.google.com/file/d/1MZvABnxwZ_Dw1c7bZCidEVyvBeAZYTvU/view?usp=drivesdk" target="_blank" class="btn btn-gold">↓ Download CV</a>
           <a href="https://drive.google.com/file/d/1MZvABnxwZ_Dw1c7bZCidEVyvBeAZYTvU/view?usp=drivesdk" target="_blank" class="btn btn-outline">Preview</a>
         </div>
       </div>
 
-      <!-- CHANGE 3: Animated tech orbit instead of static resume preview -->
+      
       <div class="resume-visual reveal" style="transition-delay:0.3s">
         <div class="tech-orbit-wrap">
-          <!-- Center -->
+          
           <div class="orbit-center">
             <i class="fa-solid fa-microchip"></i>
             <span class="orbit-center-label">Tech Stack</span>
           </div>
 
-          <!-- Ring 1 -->
+          
           <div class="orbit-ring orbit-ring-1">
             <div class="orbit-node node-r1-1">🐍<span class="node-tooltip">Python</span></div>
             <div class="orbit-node node-r1-2">⚡<span class="node-tooltip">ESP8266</span></div>
@@ -1276,7 +1242,7 @@ footer {
             <div class="orbit-node node-r1-4">🥧<span class="node-tooltip">Raspberry Pi</span></div>
           </div>
 
-          <!-- Ring 2 -->
+          
           <div class="orbit-ring orbit-ring-2">
             <div class="orbit-node node-r2-1">🌐<span class="node-tooltip">IoT</span></div>
             <div class="orbit-node node-r2-2">🤖<span class="node-tooltip">AI Prompting</span></div>
@@ -1284,7 +1250,7 @@ footer {
             <div class="orbit-node node-r2-4">📟<span class="node-tooltip">Arduino</span></div>
           </div>
 
-          <!-- Ring 3 -->
+          
           <div class="orbit-ring orbit-ring-3">
             <div class="orbit-node node-r3-1">📊<span class="node-tooltip">MS Office</span></div>
             <div class="orbit-node node-r3-2">🔧<span class="node-tooltip">Embedded C</span></div>
@@ -1295,7 +1261,7 @@ footer {
   </div>
 </section>
 
-<!-- ═══ CONTACT ═══ -->
+
 <section id="contact">
   <div class="section-wrap">
     <div class="contact-grid">
@@ -1352,7 +1318,7 @@ footer {
   </div>
 </section>
 
-<!-- FOOTER — CHANGE 2: Real Font Awesome icons -->
+
 <footer>
   <div class="footer-inner">
     <div class="footer-left">
@@ -1378,7 +1344,7 @@ footer {
 </footer>
 
 <script>
-/* ── CURSOR ── */
+
 const dot = document.getElementById('cursor-dot');
 const ring = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -1394,22 +1360,31 @@ document.querySelectorAll('a,button,.project-item,.about-card,.skill-card,.cert-
   el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
 });
 
-/* ── LOADER ── */
+
 window.addEventListener('load', () => {
-  setTimeout(() => document.getElementById('loader').classList.add('gone'), 2000);
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('gone');
+    
+    counters.forEach(c => {
+      if (!counterDone.has(c)) {
+        counterDone.add(c);
+        countUp(c);
+      }
+    });
+  }, 2000);
 });
 
-/* ── NAVBAR ── */
+
 const nav = document.getElementById('navbar');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
 
-/* ── HAMBURGER ── */
+
 const ham = document.getElementById('ham');
 const navLinks = document.getElementById('navLinks');
 ham.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
 
-/* ── TYPING ANIMATION ── */
+
 const phrases = ['IoT Developer_','Hardware Innovator_','CS Engineer_','Tech Entrepreneur_','Embedded Systems Dev_'];
 let pi = 0, ci = 0, del = false;
 const typEl = document.getElementById('typingEl');
@@ -1423,7 +1398,7 @@ function typeAnim() {
 }
 setTimeout(typeAnim, 2400);
 
-/* ── COUNTER ANIMATION ── */
+
 function countUp(el) {
   const target = +el.dataset.target;
   let c = 0; const step = target / 30;
@@ -1433,7 +1408,7 @@ function countUp(el) {
 const counterDone = new Set();
 const counters = document.querySelectorAll('[data-target]');
 
-/* ── REVEAL ON SCROLL ── */
+
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -1449,7 +1424,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 reveals.forEach(r => observer.observe(r));
 
-/* ── CONTACT FORM ── */
+
 document.getElementById('contactForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const name = document.getElementById('fname').value;
@@ -1461,7 +1436,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   this.reset();
 });
 
-/* ── SMOOTH SCROLL ── */
+
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', function(e) {
     const t = document.querySelector(this.getAttribute('href'));
@@ -1469,7 +1444,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-/* ── PARTICLE CANVAS ── */
+
 const canvas = document.createElement('canvas');
 canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.4';
 document.body.appendChild(canvas);
